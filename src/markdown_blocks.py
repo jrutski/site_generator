@@ -18,7 +18,7 @@ def markdown_to_blocks(markdown):
     for line in markdown.split("\n\n"):
         if line == '':
             continue
-        ret_blocks.append(line.strip('\n'))
+        ret_blocks.append(line.strip())
     return ret_blocks
 
 def block_to_block_type(block):
@@ -63,6 +63,8 @@ def block_to_html_node(block):
         return code_to_html_node(block)
     if b_type == BlockType.UNORDERED_LIST:
         return unordered_list_to_html_node(block)
+    if b_type == BlockType.QUOTE:
+        return quote_to_html_node(block)
     raise ValueError("Invalid block type")
 
 def text_to_child(text):
@@ -80,12 +82,16 @@ def paragraph_to_html_node(block):
     return ParentNode('p', children)
 
 def heading_to_html_node(block):
-    pass
+    heading_level = 0
+    heading_level = block.count('#')
+    heading_text = block[heading_level + 1:]
+    child = text_to_child(heading_text)
+    return ParentNode(f"h{heading_level}", child)
 
 def code_to_html_node(block):
     raw_text = TextNode(block[4:-3], TextType.TEXT)
     child_node = text_node_to_html_node(raw_text)
-    return ParentNode("pre", ParentNode("code", child_node))
+    return ParentNode("pre", [ParentNode("code", [child_node])])
 
 def ordered_list_to_html_node(block):
     list_items = block.split('\n')
@@ -108,4 +114,10 @@ def unordered_list_to_html_node(block):
 
 
 def quote_to_html_node(block):
-    pass
+    quote_lines = block.split('\n')
+    ret_quote = []
+    for line in quote_lines:
+        ret_quote.append(line.lstrip('>').strip())
+    quote_text = ' '.join(ret_quote)
+    child = text_to_child(quote_text)
+    return ParentNode('blockquote', child)
