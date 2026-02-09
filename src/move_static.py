@@ -3,6 +3,7 @@ from markdown_blocks import markdown_to_html_node
 
 
 def prep_directory(dir_path):
+    print(f"Prep directory: {dir_path}")
     if os.path.exists(dir_path):
         for dir_obj in os.listdir(dir_path):
             if os.path.isdir(os.path.join(dir_path, dir_obj)):
@@ -21,6 +22,7 @@ def del_directory(dir_path):
     os.rmdir(dir_path)
 
 def copy_files(src_path, target_path):
+    print(f"Copy, Src: {src_path}, Dest: {target_path}")
     prep_directory(target_path)
     if os.path.exists(src_path):
         for dir_obj in os.listdir(src_path):
