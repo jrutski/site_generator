@@ -64,6 +64,7 @@ def generate_page(from_path, template_path, dest_path):
     html_string = md_html_nodes.to_html()
     
     final_html = (template_contents.replace('{{ Title }}', html_title).replace('{{ Content }}', html_string))
+    # final_html = final_html.replace()
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
