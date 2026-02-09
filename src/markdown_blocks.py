@@ -26,9 +26,9 @@ def block_to_block_type(block):
 
     if len(lines) > 1 and lines[0].startswith('```') and lines[-1].startswith('```'):
         return BlockType.CODE
-    if block.startswith('> '):
+    if block.startswith('>'):
         for line in lines:
-            if not line.startswith('> '):
+            if not line.startswith('>'):
                 return BlockType.PARAGRAPH
         return BlockType.QUOTE
     if block.startswith('- '):
@@ -59,12 +59,16 @@ def block_to_html_node(block):
     b_type = block_to_block_type(block)
     if b_type == BlockType.PARAGRAPH:
         return paragraph_to_html_node(block)
+    if b_type == BlockType.HEADING:
+        return heading_to_html_node(block)
     if b_type == BlockType.CODE:
         return code_to_html_node(block)
     if b_type == BlockType.UNORDERED_LIST:
         return unordered_list_to_html_node(block)
     if b_type == BlockType.QUOTE:
         return quote_to_html_node(block)
+    if b_type == BlockType.ORDERED_LIST:
+        return ordered_list_to_html_node(block)
     raise ValueError("Invalid block type")
 
 def text_to_child(text):
